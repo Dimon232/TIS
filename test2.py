@@ -1,31 +1,25 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Получаем в переменную browser указатель на браузер
 browser = webdriver.Chrome()
 
-# Переходим на страницу, на которой находится форма для авторизации
-browser.get('https://auth.edimdoma.ru/login?service=https%3A%2F%2Fwww.edimdoma.ru%2Fusers%2Fservice')
-
-# заполняем поле логин, привязываемся к элементу через его имя
-username = browser.find_element(by=By.NAME, value='username')
-username.send_keys('')
-
-# заполняем поле пароля, привязываемся к элементу через его id
-password = browser.find_element(by=By.NAME, value='password')
-password.send_keys('')
-
-# Получаем указатель на кнопку "Вход", привязываемся к элементу через его css_selector
-button = browser.find_element(by=By.NAME, value='button')
-# Нажимаем на кнопку входа
-button.click()
-# Проверка результата
+browser.get("https://www.edimdoma.ru/retsepty?with_ingredient=&with_ingredient_condition=and&without_ingredient=&user_ids=&field=&direction=&query=")
 
 try:
-    print('The test was completed successfully')
-except Exception as err:
-    print('The test was failled')
+    checkbox = browser.find_element(By.XPATH, '//input[@value="основные блюда"]')
 
-# Закрываем браузер
+    if not checkbox.is_selected():
+        checkbox.click()
+
+    show_button = browser.find_element(By.ID, 'recipe-filters-submit')
+    show_button.click()
+    print('The test was completed successfully')
+
+except Exception as err:
+    print('The test was failed')
+    print(f'Error: {err}')
+
+browser.quit()
