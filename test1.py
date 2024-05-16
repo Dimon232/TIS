@@ -3,29 +3,22 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Получаем в переменную browser указатель на браузер
 browser = webdriver.Chrome()
 
-# Переходим на страницу, на которой находится форма для авторизации
-browser.get('https://auth.edimdoma.ru/login?service=https%3A%2F%2Fwww.edimdoma.ru%2Fusers%2Fservice')
-
-# заполняем поле логин, привязываемся к элементу через его имя
-username = browser.find_element(by=By.NAME, value='username')
-username.send_keys('testtest')
-
-# заполняем поле пароля, привязываемся к элементу через его id
-password = browser.find_element(by=By.NAME, value='password')
-password.send_keys('testtest')
-
-# Получаем указатель на кнопку "Вход", привязываемся к элементу через его css_selector
-button = browser.find_element(by=By.NAME, value='button')
-# Нажимаем на кнопку входа
-button.click()
-# Проверка результата
+browser.get('https://www.edimdoma.ru/retsepty?tags%5Brecipe_jv%5D%5B%5D=%D0%92%D1%81%D0%B5+%D1%80%D0%B5%D1%86%D0%B5%D0%BF%D1%82%D1%8B&with_ingredient=&with_ingredient_condition=and&without_ingredient=&user_ids=&field=&direction=&query=')
 
 try:
-    print('The test was completed successfully')
-except Exception as err:
-    print('The test was failled')
+    query_input = WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.ID, 'query')))
 
-# Закрываем браузер
+    query_input.send_keys('Тестовый запрос')
+
+    submit_button = WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.field__button')))
+
+    submit_button.click()
+    print('The test was completed successfully')
+
+except Exception as err:
+    print('The test was failed')
+    print(f'Error: {err}')
+
+browser.quit()
